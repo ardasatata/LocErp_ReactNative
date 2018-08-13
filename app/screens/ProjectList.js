@@ -5,13 +5,27 @@ import {
     View,
     ScrollView,
     ActivityIndicator,
-    RefreshControl
+    RefreshControl,
+    Button
 } from 'react-native';
 import * as firebase from 'firebase';
-import { List, ListItem } from 'react-native-elements';
+import { List, ListItem} from 'react-native-elements';
 
 
 export default class ProjectList extends Component {
+
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: 'hehe',
+            headerRight: (
+                <Button
+                    onPress={() => alert('This is a button!')}
+                    title="Info"
+                    color="#fff"
+                />
+            ),
+        };
+    };
 
     constructor(props) {
         super(props);
@@ -79,7 +93,9 @@ export default class ProjectList extends Component {
     }
 
     openProject(id){
-        this.props.navigation.navigate('ProjectStack');
+        this.props.navigation.navigate('ProjectStack',{
+            projectId : id
+        });
         console.log('test hehe '+id);
     }
 
@@ -98,7 +114,10 @@ export default class ProjectList extends Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                {this.isLoading(this.state.isLoading)}
+                <Button
+                    onPress={() => alert('This is a button!')}
+                    title="Add Project"
+                />
                 <ScrollView
                     refreshControl={
                     <RefreshControl

@@ -7,7 +7,7 @@ import {
     withNavigation,
     TabNavigator
 } from 'react-navigation';
-import { Icon } from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 
 import Home from './screens/Home';
 import ProjectList from './screens/ProjectList';
@@ -23,25 +23,26 @@ export const Tabs = createBottomTabNavigator({
         navigationOptions: {
             title: 'Home',
             tabBarLabel: 'Home',
-            tabBarIcon: ({ tintColor }) => <Icon name="home" type="Entypo" size={28} color={tintColor} />
+            tabBarIcon: ({ tintColor }) => <Icon name="home" type="Entypo" size={28} color={tintColor} />,
         },
     },
     'ProjectList': {
         screen: ProjectList,
         navigationOptions: {
             tabBarLabel: 'Project List',
-            tabBarIcon: ({tintColor}) => <Icon name="list" type="Entypo" size={28} color={tintColor}/>
+            tabBarIcon: ({tintColor}) => <Icon name="list" type="Entypo" size={28} color={tintColor}/>,
+
         },
     }
 });
 
 export const ProjectStack = createStackNavigator({
-    ProjectList: {
-        screen: ProjectList,
-        navigationOptions: ({navigation}) => ({
-            header: null,
-        }),
-    },
+    // ProjectList: {
+    //     screen: ProjectList,
+    //     navigationOptions: ({navigation}) => ({
+    //         header: null,
+    //     }),
+    // },
     Project: {
         screen: Project,
         navigationOptions: ({navigation}) => ({
@@ -59,14 +60,14 @@ export const createRootNavigator = () => {
                 screen: Tabs,
                 navigationOptions: {
                     title: "Locomotive Project",
-                    gesturesEnabled: false
+                    gesturesEnabled: false,
                 }
             },
             ProjectStack: {
                 screen: ProjectStack,
                 navigationOptions: {
                     title: "Project",
-                    gesturesEnabled: false
+                    gesturesEnabled: true
                 }
             }
         },

@@ -5,10 +5,11 @@ import {
     View,
     ScrollView,
     ActivityIndicator,
-    RefreshControl
+    RefreshControl,
+    Alert
 } from 'react-native';
 import * as firebase from 'firebase';
-import { List, ListItem } from 'react-native-elements';
+import { Button,List, ListItem } from 'react-native-elements';
 
 export default class Project extends Component {
 
@@ -16,8 +17,9 @@ export default class Project extends Component {
         super(props);
         // Don't call this.setState() here!
         this.state = {
-            projects: [],
-            isLoading: true
+            project: [], //data project
+            isLoading: true,
+            projectId: '',
         };
     }
 
@@ -32,43 +34,48 @@ export default class Project extends Component {
         };
         //firebase.initializeApp(firebaseConfig);
         console.log(firebase);
+        const {navigation} = this.props;
+        this.state.projectId = navigation.getParam('projectId',null);
     }
 
     componentDidMount(){
-        this.fetchProjectList();
+        this.fetchProjectData();
     }
 
-    fetchProjectList(){
+    fetchProjectData(){
 
-        var query = firebase.database().ref("projects").orderByKey();
+        var query = firebase.database().ref('projects/'+this.state.projectId);
 
-        var projects = [];
+        var _project = [];
+
+        //console.log(navigation.getParam('projectId',null));
 
         query.once("value").then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                var key = childSnapshot.key;
-                var childData = childSnapshot.val();
+                var key = snapshot.key;
+                var childData = snapshot.val();
 
                 var project = {
                     id: childData['id'],
                     name: childData['name'],
+                    desc: childData['description'],
+                    dateAdded : childData['dateAdded'], //masih timestamp
                     status: childData['status'],
-                    budget: childData['budget']
+                    budget: childData['budget'],
+
                 }
 
                 console.log(project);
                 //projects.push(project);
 
-                projects.push(project);
+                _project.push(project);
                 //console.log(projects);
-            });
-            return projects;
-        }).then((projects)=>{
+            return project;
+        }).then((project)=>{
             this.setState({
-                projects : projects,
+                project : project,
                 isLoading : false
             });
-            console.log(this.state.projects);
+            console.log(this.state.project);
         });
     }
 
@@ -88,27 +95,45 @@ export default class Project extends Component {
 
     }
 
+    showAlert(){
+        return Alert.alert(
+            'Alert Title',
+            'My Alert Msg',
+            [
+                {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ],
+            { cancelable: false }
+        )
+    }
+
     render() {
         return (
-            <View style={{flex: 1}}>
-                {this.isLoading(this.state.isLoading)}
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.isLoading}
-                            onRefresh={this.componentDidMount()}
-                        />}>
-                    <List containerStyle={{marginBottom: 20}}>
-                        {
-                            this.state.projects.map((data) => (
-                                <ListItem button onPress={() => this.testMethod(data.id)}
-                                          key={data.id}
-                                          title={data.name}
-                                />
-                            ))
-                        }
-                    </List>
-                </ScrollView>
+            <View style={{flex: 1 ,padding:8,backgroundColor: '#F5FCFF',alignItems: 'center'}}>
+                {/*{this.isLoading(this.state.isLoading)}*/}
+                <Text style={{ textAlign: 'left'}}>
+                    Project ID  : <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>{'\n'}
+                    Description : <Text>{this.state.project.name}</Text>{'\n'}
+                    Start Date  : <Text>{this.state.project.dateAdded}</Text>{'\n'}
+                    Status      : <Text>{this.state.project.status}</Text>{'\n'}
+                    End Date    : <Text>TBA</Text>{'\n'}{'\n'}
+                    Budget      : <Text>{this.state.project.budget}</Text>{'\n'}
+                    Expense     : <Text>TBA</Text>{'\n'}
+                    Sisa        : <Text>TBA</Text>{'\n'}
+                </Text>
+                <Button
+                    onPress={() => this.showAlert()}
+                    title="Add Project"g
+                    buttonStyle={{
+                        backgroundColor: "rgba(92, 99,216, 1)",
+                        width: 120,
+                        height: 45,
+                        borderColor: "transparent",
+                        borderWidth: 0,
+                        borderRadius: 5
+                    }}
+                />
             </View>
         );
     }
