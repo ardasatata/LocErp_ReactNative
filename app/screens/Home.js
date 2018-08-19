@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
-    View
+    View,
+    Button, ScrollView, RefreshControl
 } from 'react-native';
 import * as firebase from 'firebase';
+import {List, ListItem} from "react-native-elements";
 
 export default class Home extends Component {
 
@@ -21,9 +23,23 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>
-                    Home
-                </Text>
+                <ScrollView>
+                    <Text style={styles.title}>
+                        Main Menu
+                    </Text>
+                    <Button
+                        //onPress={}
+                        title="Project List"
+                        color="#841584"
+                        accessibilityLabel="Learn more about this purple button"
+                    />
+                    <Button
+                        //onPress={}
+                        title="Archive Project"
+                        color="#841584"
+                        accessibilityLabel="Learn more about this purple button"
+                    />
+                </ScrollView>
             </View>
         );
     }

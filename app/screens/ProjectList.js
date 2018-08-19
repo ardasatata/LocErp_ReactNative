@@ -99,6 +99,12 @@ export default class ProjectList extends Component {
         console.log('test hehe '+id);
     }
 
+    openProjectAdd(){
+        this.props.navigation.navigate('ProjectAddStack',{
+        });
+        console.log('test hehe open add');
+    }
+
     isLoading(l){
         if (l) {
             return (
@@ -113,9 +119,9 @@ export default class ProjectList extends Component {
 
     render() {
         return (
-            <View style={{flex: 1}}>
+            <View style={styles.container}>
                 <Button
-                    onPress={() => alert('This is a button!')}
+                    onPress={()=>this.openProjectAdd()}
                     title="Add Project"
                 />
                 <ScrollView
@@ -144,8 +150,6 @@ export default class ProjectList extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
     title: {

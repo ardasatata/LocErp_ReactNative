@@ -13,6 +13,7 @@ import Home from './screens/Home';
 import ProjectList from './screens/ProjectList';
 
 import Project from './screens/Project';
+import ProjectAdd from "./screens/ProjectAdd";
 
 
 let screen = Dimensions.get('window');
@@ -37,14 +38,19 @@ export const Tabs = createBottomTabNavigator({
 });
 
 export const ProjectStack = createStackNavigator({
-    // ProjectList: {
-    //     screen: ProjectList,
-    //     navigationOptions: ({navigation}) => ({
-    //         header: null,
-    //     }),
-    // },
     Project: {
         screen: Project,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarVisible: false,
+            gesturesEnabled: true
+        }),
+    },
+});
+
+export const ProjectAddStack = createStackNavigator({
+    Project: {
+        screen: ProjectAdd,
         navigationOptions: ({navigation}) => ({
             header: null,
             tabBarVisible: false,
@@ -67,6 +73,13 @@ export const createRootNavigator = () => {
                 screen: ProjectStack,
                 navigationOptions: {
                     title: "Project",
+                    gesturesEnabled: true
+                }
+            },
+            ProjectAddStack: {
+                screen: ProjectAddStack,
+                navigationOptions: {
+                    title: "Project Add",
                     gesturesEnabled: true
                 }
             }

@@ -112,16 +112,80 @@ export default class Project extends Component {
         return (
             <View style={{flex: 1 ,padding:8,backgroundColor: '#F5FCFF',alignItems: 'center'}}>
                 {/*{this.isLoading(this.state.isLoading)}*/}
-                <Text style={{ textAlign: 'left'}}>
-                    Project ID  : <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>{'\n'}
-                    Description : <Text>{this.state.project.name}</Text>{'\n'}
-                    Start Date  : <Text>{this.state.project.dateAdded}</Text>{'\n'}
-                    Status      : <Text>{this.state.project.status}</Text>{'\n'}
-                    End Date    : <Text>TBA</Text>{'\n'}{'\n'}
-                    Budget      : <Text>{this.state.project.budget}</Text>{'\n'}
-                    Expense     : <Text>TBA</Text>{'\n'}
-                    Sisa        : <Text>TBA</Text>{'\n'}
-                </Text>
+                {/*<Text style={{ textAlign: 'left'}}>*/}
+                    {/*Project ID  : <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>{'\n'}*/}
+                    {/*Description : <Text>{this.state.project.name}</Text>{'\n'}*/}
+                    {/*Start Date  : <Text>{this.state.project.dateAdded}</Text>{'\n'}*/}
+                    {/*Status      : <Text>{this.state.project.status}</Text>{'\n'}*/}
+                    {/*End Date    : <Text>TBA</Text>{'\n'}{'\n'}*/}
+                    {/*Budget      : <Text>{this.state.project.budget}</Text>{'\n'}*/}
+                    {/*Expense     : <Text>TBA</Text>{'\n'}*/}
+                    {/*Sisa        : <Text>TBA</Text>{'\n'}*/}
+                {/*</Text>*/}
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Project ID</Text>
+                    </View>
+                    <View style={{flex:2}} >
+                        <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Description</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>{this.state.project.name}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Start Date</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>{this.state.project.dateAdded}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Status</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>{this.state.project.status}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>End Date</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>TBA</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Budget</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>{this.state.project.budget}</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Expense</Text>
+                    </View>
+                    <View style={{flex:2,}} >
+                        <Text>TBA</Text>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <View style={styles.rowProp} >
+                        <Text>Sisa</Text>
+                    </View>
+                    <View style={{flex:2}} >
+                        <Text>TBA</Text>
+                    </View>
+                </View>
                 <Button
                     onPress={() => this.showAlert()}
                     title="Add Project"g
@@ -150,5 +214,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         margin: 10,
+    },
+    rowProp:{
+        flex:1,
+        margin: 2,
+        textAlign: 'left'
     }
 });
