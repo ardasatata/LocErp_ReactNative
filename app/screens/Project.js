@@ -18,6 +18,8 @@ export default class Project extends Component {
         // Don't call this.setState() here!
         this.state = {
             project: [], //data project
+            budgets:[], //data budget
+            schedules:[], //data tanggal
             isLoading: true,
             projectId: '',
         };
@@ -77,6 +79,78 @@ export default class Project extends Component {
             });
             console.log(this.state.project);
         });
+    }
+
+    fetchSchedulesData(){
+
+        var query = firebase.database().ref('schedules/'+this.state.projectId);
+
+        var _schedules = [];
+
+        query.once("value").then(function(snapshot) {
+
+            snapshot.forEach(function (childSnapshot){
+
+                var key = childSnapshot.key;
+                //var childData = childSnapshot.val();
+
+                var schedule = {
+                    id: childSnapshot['id'],
+                    desc: childSnapshot['desc'],
+                    amount: childSnapshot['amount']
+                }
+
+                console.log(budget);
+                //projects.push(project);
+
+                _budgets.push(budget);
+                //console.log(projects);
+            })
+            return _budgets;
+        }).then((_budgets)=>{
+            this.setState({
+                budgets : _budgets,
+                //isLoading : false
+            });
+            console.log(this.state.budgets);
+        });
+
+    }
+
+    fetchSchedulesData(){
+
+        var query = firebase.database().ref('schedules/'+this.state.projectId);
+
+        var _budgets = [];
+
+        query.once("value").then(function(snapshot) {
+
+            snapshot.forEach(function (childSnapshot){
+
+                var key = snapshot.key;
+                var childData = snapshot.val();
+
+                var budget = {
+                    id: childData['id'],
+                    desc: childData['desc'],
+                    amount: childData['amount']
+                }
+
+                console.log(budget);
+                //projects.push(project);
+
+                _budgets.push(budget);
+                //console.log(projects);
+            })
+            return _budgets;
+        }).then((_budgets)=>{
+            this.setState({
+                budgets : _budgets,
+                //isLoading : false
+            });
+            console.log(this.state.budgets);
+        });
+
     }
 
     testMethod(id){
