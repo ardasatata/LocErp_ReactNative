@@ -42,6 +42,8 @@ export default class Project extends Component {
 
     componentDidMount(){
         this.fetchProjectData();
+        this.fetchBudgetsData();
+        this.fetchSchedulesData();
     }
 
     fetchProjectData(){
@@ -81,23 +83,24 @@ export default class Project extends Component {
         });
     }
 
-    fetchSchedulesData(){
+    fetchBudgetsData(){
 
-        var query = firebase.database().ref('schedules/'+this.state.projectId);
+        var query = firebase.database().ref('budgets/'+this.state.projectId);
 
-        var _schedules = [];
+        var _budgets = [];
 
         query.once("value").then(function(snapshot) {
-
             snapshot.forEach(function (childSnapshot){
+
+                var childData = snapshot.val();
 
                 var key = childSnapshot.key;
                 //var childData = childSnapshot.val();
 
-                var schedule = {
-                    id: childSnapshot['id'],
-                    desc: childSnapshot['desc'],
-                    amount: childSnapshot['amount']
+                var budget = {
+                    id: childSnapshot.key,
+                    desc: childSnapshot.val().desc,
+                    amount: childSnapshot.val().amount
                 }
 
                 console.log(budget);
@@ -121,34 +124,32 @@ export default class Project extends Component {
 
         var query = firebase.database().ref('schedules/'+this.state.projectId);
 
-        var _budgets = [];
+        var _schedules = [];
 
         query.once("value").then(function(snapshot) {
-
             snapshot.forEach(function (childSnapshot){
 
-                var key = snapshot.key;
-                var childData = snapshot.val();
-
-                var budget = {
-                    id: childData['id'],
-                    desc: childData['desc'],
-                    amount: childData['amount']
+                var schedule = {
+                    id: childSnapshot.key,
+                    date: childSnapshot.val().date,
+                    time: childSnapshot.val().time,
+                    desc: childSnapshot.val().desc,
+                    status: childSnapshot.val().status
                 }
 
-                console.log(budget);
+                console.log(schedule);
                 //projects.push(project);
 
-                _budgets.push(budget);
+                _schedules.push(schedule);
                 //console.log(projects);
             })
-            return _budgets;
-        }).then((_budgets)=>{
+            return _schedules;
+        }).then((_schedules)=>{
             this.setState({
-                budgets : _budgets,
+                schedules : _schedules,
                 //isLoading : false
             });
-            console.log(this.state.budgets);
+            console.log(this.state.schedules);
         });
 
     }
@@ -184,7 +185,8 @@ export default class Project extends Component {
 
     render() {
         return (
-            <View style={{flex: 1 ,padding:8,backgroundColor: '#F5FCFF',alignItems: 'center'}}>
+            <View style={{flex: 1 ,padding:2,backgroundColor: '#F5FCFF'}}>
+                <ScrollView>
                 {/*{this.isLoading(this.state.isLoading)}*/}
                 {/*<Text style={{ textAlign: 'left'}}>*/}
                     {/*Project ID  : <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>{'\n'}*/}
@@ -196,6 +198,11 @@ export default class Project extends Component {
                     {/*Expense     : <Text>TBA</Text>{'\n'}*/}
                     {/*Sisa        : <Text>TBA</Text>{'\n'}*/}
                 {/*</Text>*/}
+
+                    <Text style={styles.title}>
+                        {this.state.project.name}
+                    </Text>
+
                 <View style={{flexDirection: 'row'}}>
                     <View style={styles.rowProp} >
                         <Text>Project ID</Text>
@@ -260,18 +267,71 @@ export default class Project extends Component {
                         <Text>TBA</Text>
                     </View>
                 </View>
-                <Button
-                    onPress={() => this.showAlert()}
-                    title="Add Project"g
-                    buttonStyle={{
-                        backgroundColor: "rgba(92, 99,216, 1)",
-                        width: 120,
-                        height: 45,
-                        borderColor: "transparent",
-                        borderWidth: 0,
-                        borderRadius: 5
-                    }}
-                />
+
+                    <Text style={styles.title}>
+                        Budgets
+                    </Text>
+                    <Button
+                        onPress={() => this.showAlert()}
+                        title="Add Expense"
+                        buttonStyle={{
+                            backgroundColor: "rgba(92, 99,216, 1)",
+                            width: 120,
+                            height: 45,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            borderRadius: 5
+                        }}
+                    />
+                    <View style={{flex:1}}>
+                            <List containerStyle={{marginBottom: 20}}>
+                                {
+                                    this.state.budgets.map((data) => (
+                                        <ListItem key={data.id}
+                                                  title={data.amount}
+                                                  subtitle={data.desc}
+                                        />
+                                    ))
+                                }
+                            </List>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={styles.rowProp} >
+                            <Text style={{textAlign:'center'}}>Total</Text>
+                        </View>
+                        <View style={{flex:2}} >
+                            <Text style={{textAlign:'center'}}>IDR 0,00</Text>
+                        </View>
+                    </View>
+
+                    <Text style={styles.title}>
+                        Schedules
+                    </Text>
+                    <Button
+                        onPress={() => this.showAlert()}
+                        title="Add Schedules"
+                        buttonStyle={{
+                            backgroundColor: "rgba(92, 99,216, 1)",
+                            width: 120,
+                            height: 45,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            borderRadius: 5
+                        }}
+                    />
+                    <View style={{flex:1}}>
+                        <List containerStyle={{marginBottom: 20}}>
+                            {
+                                this.state.schedules.map((data) => (
+                                    <ListItem key={data.id}
+                                              title={data.date +' '+data.time}
+                                              subtitle={data.desc}
+                                    />
+                                ))
+                            }
+                        </List>
+                    </View>
+                </ScrollView>
             </View>
         );
     }
@@ -285,7 +345,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     title: {
-        fontSize: 20,
+        fontSize: 24,
         textAlign: 'center',
         margin: 10,
     },
