@@ -50,6 +50,7 @@
 		C427786FC960476E8085E632 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE195AB10B86473D8945E54C /* FontAwesome.ttf */; };
 		C98BF1A8E1FC4783A9DB47D4 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27874E90539645C1BD73A28E /* FontAwesome5_Regular.ttf */; };
 		D3001031F759475594E07A05 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5C23A729C824CDBB017666A /* EvilIcons.ttf */; };
+		D808E7692133200100D82FE4 /* production-logo-black.png in Resources */ = {isa = PBXBuildFile; fileRef = D808E7422133200100D82FE4 /* production-logo-black.png */; };
 		E3B557796CE34D35B4B752CD /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDD7C3B7369D4779862A308F /* SimpleLineIcons.ttf */; };
 		F1098889807A4485BC06C364 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9ED69CEDE0949DAB7A24C8A /* FontAwesome5_Brands.ttf */; };
 		F983D08582A14514A53A00B8 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A27A60038D914924822932C2 /* libRNVectorIcons.a */; };
@@ -377,6 +378,7 @@
 		BDD7C3B7369D4779862A308F /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		C07B572DCF6A47DFB8C05235 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		D5C23A729C824CDBB017666A /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		D808E7422133200100D82FE4 /* production-logo-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "production-logo-black.png"; sourceTree = "<group>"; };
 		DE195AB10B86473D8945E54C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		E5412C65308D4E90B2689C5E /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		E6222D9B2F27442CBE6CAF0A /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -521,6 +523,7 @@
 		13B07FAE1A68108700A75B9A /* LocErp_ReactNative */ = {
 			isa = PBXGroup;
 			children = (
+				D808E7422133200100D82FE4 /* production-logo-black.png */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1145,6 +1148,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				678B857B87F34B6983E82BFE /* Entypo.ttf in Resources */,
 				D3001031F759475594E07A05 /* EvilIcons.ttf in Resources */,
+				D808E7692133200100D82FE4 /* production-logo-black.png in Resources */,
 				5DA5E241D8F54F8AAD82AEB5 /* Feather.ttf in Resources */,
 				C427786FC960476E8085E632 /* FontAwesome.ttf in Resources */,
 				F1098889807A4485BC06C364 /* FontAwesome5_Brands.ttf in Resources */,
@@ -1327,7 +1331,7 @@
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = A3Z29EGCRZ;
@@ -1342,6 +1346,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.LocErp-ReactNative";
 				PRODUCT_NAME = LocErp_ReactNative;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1351,7 +1356,7 @@
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A3Z29EGCRZ;
 				HEADER_SEARCH_PATHS = (
@@ -1365,6 +1370,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.LocErp-ReactNative";
 				PRODUCT_NAME = LocErp_ReactNative;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

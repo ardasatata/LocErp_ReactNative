@@ -22,6 +22,8 @@ export default class Project extends Component {
             schedules:[], //data tanggal
             isLoading: true,
             projectId: '',
+            expense: 0,
+            sisa:0
         };
     }
 
@@ -41,9 +43,38 @@ export default class Project extends Component {
     }
 
     componentDidMount(){
-        this.fetchProjectData();
-        this.fetchBudgetsData();
-        this.fetchSchedulesData();
+        this.fetchAllData();
+    }
+
+    fetchAllData(){
+        try {
+
+            console.log('fetch data');
+
+            this.state.isLoading = true;
+
+            this.fetchProjectData();
+            this.fetchBudgetsData();
+            this.fetchSchedulesData();
+        }
+        finally {
+            this.state.isLoading = false;
+            console.log('done');
+        }
+    }
+
+    openBudgetAdd(){
+        this.props.navigation.navigate('BudgetAddStack',{
+            projectId : this.state.projectId
+        });
+        console.log('test hehe open add');
+    }
+
+    openScheduleAdd(){
+        this.props.navigation.navigate('ScheduleAddStack',{
+            projectId : this.state.projectId
+        });
+        console.log('test hehe open add');
     }
 
     fetchProjectData(){
@@ -77,15 +108,47 @@ export default class Project extends Component {
         }).then((project)=>{
             this.setState({
                 project : project,
-                isLoading : false
+                //isLoading : false
             });
             console.log(this.state.project);
         });
     }
 
+    deleteExpense(id){
+        var refDelete = firebase.database().ref('budgets/'+this.state.projectId+'/'+id);
+
+        Alert.alert(
+            'Atention',
+            'Delete this expense ?',
+            [
+                {text: 'Cancel', onPress: () => console.log('cancel delete'), style: 'cancel'},
+                {text: 'OK', onPress: () => refDelete.remove().then(this.fetchAllData())},
+            ],
+        )
+
+    }
+
+    deleteSchedule(id){
+        var refDelete = firebase.database().ref('schedules/'+this.state.projectId+'/'+id);
+
+        Alert.alert(
+            'Atention',
+            'Delete this schedule ?',
+            [
+                {text: 'Cancel', onPress: () => console.log('cancel delete'), style: 'cancel'},
+                {text: 'OK', onPress: () => refDelete.remove().then(this.fetchAllData())},
+            ],
+        )
+
+    }
+
     fetchBudgetsData(){
 
         var query = firebase.database().ref('budgets/'+this.state.projectId);
+
+        this.state.expense = 0;
+
+        var expense = 0;
 
         var _budgets = [];
 
@@ -103,6 +166,8 @@ export default class Project extends Component {
                     amount: childSnapshot.val().amount
                 }
 
+                expense += parseInt(budget.amount);
+
                 console.log(budget);
                 //projects.push(project);
 
@@ -111,10 +176,12 @@ export default class Project extends Component {
             })
             return _budgets;
         }).then((_budgets)=>{
+
             this.setState({
                 budgets : _budgets,
-                //isLoading : false
+                expense : expense
             });
+
             console.log(this.state.budgets);
         });
 
@@ -186,19 +253,13 @@ export default class Project extends Component {
     render() {
         return (
             <View style={{flex: 1 ,padding:2,backgroundColor: '#F5FCFF'}}>
-                <ScrollView>
-                {/*{this.isLoading(this.state.isLoading)}*/}
-                {/*<Text style={{ textAlign: 'left'}}>*/}
-                    {/*Project ID  : <Text style={{fontWeight: 'bold'}}>{this.state.projectId}</Text>{'\n'}*/}
-                    {/*Description : <Text>{this.state.project.name}</Text>{'\n'}*/}
-                    {/*Start Date  : <Text>{this.state.project.dateAdded}</Text>{'\n'}*/}
-                    {/*Status      : <Text>{this.state.project.status}</Text>{'\n'}*/}
-                    {/*End Date    : <Text>TBA</Text>{'\n'}{'\n'}*/}
-                    {/*Budget      : <Text>{this.state.project.budget}</Text>{'\n'}*/}
-                    {/*Expense     : <Text>TBA</Text>{'\n'}*/}
-                    {/*Sisa        : <Text>TBA</Text>{'\n'}*/}
-                {/*</Text>*/}
-
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isLoading}
+                            onRefresh={()=>this.fetchAllData()}
+                        />}
+                >
                     <Text style={styles.title}>
                         {this.state.project.name}
                     </Text>
@@ -240,7 +301,7 @@ export default class Project extends Component {
                         <Text>End Date</Text>
                     </View>
                     <View style={{flex:2,}} >
-                        <Text>TBA</Text>
+                        <Text>-</Text>
                     </View>
                 </View>
                 <View style={{flexDirection: 'row'}}>
@@ -256,7 +317,7 @@ export default class Project extends Component {
                         <Text>Expense</Text>
                     </View>
                     <View style={{flex:2,}} >
-                        <Text>TBA</Text>
+                        <Text>{this.state.expense}</Text>
                     </View>
                 </View>
                 <View style={{flexDirection: 'row'}}>
@@ -264,7 +325,7 @@ export default class Project extends Component {
                         <Text>Sisa</Text>
                     </View>
                     <View style={{flex:2}} >
-                        <Text>TBA</Text>
+                        <Text>{this.state.project.budget - this.state.expense}</Text>
                     </View>
                 </View>
 
@@ -272,7 +333,7 @@ export default class Project extends Component {
                         Budgets
                     </Text>
                     <Button
-                        onPress={() => this.showAlert()}
+                        onPress={() => this.openBudgetAdd()}
                         title="Add Expense"
                         buttonStyle={{
                             backgroundColor: "rgba(92, 99,216, 1)",
@@ -288,6 +349,7 @@ export default class Project extends Component {
                                 {
                                     this.state.budgets.map((data) => (
                                         <ListItem key={data.id}
+                                                  button onPress={() => this.deleteExpense(data.id)}
                                                   title={data.amount}
                                                   subtitle={data.desc}
                                         />
@@ -300,7 +362,7 @@ export default class Project extends Component {
                             <Text style={{textAlign:'center'}}>Total</Text>
                         </View>
                         <View style={{flex:2}} >
-                            <Text style={{textAlign:'center'}}>IDR 0,00</Text>
+                            <Text style={{textAlign:'center'}}>IDR {this.state.expense},00</Text>
                         </View>
                     </View>
 
@@ -308,7 +370,7 @@ export default class Project extends Component {
                         Schedules
                     </Text>
                     <Button
-                        onPress={() => this.showAlert()}
+                        onPress={() => this.openScheduleAdd()}
                         title="Add Schedules"
                         buttonStyle={{
                             backgroundColor: "rgba(92, 99,216, 1)",
@@ -324,6 +386,7 @@ export default class Project extends Component {
                             {
                                 this.state.schedules.map((data) => (
                                     <ListItem key={data.id}
+                                              button onPress={() => this.deleteSchedule(data.id)}
                                               title={data.date +' '+data.time}
                                               subtitle={data.desc}
                                     />

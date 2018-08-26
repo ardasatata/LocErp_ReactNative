@@ -11,9 +11,13 @@ import {Button, Icon} from 'react-native-elements';
 
 import Home from './screens/Home';
 import ProjectList from './screens/ProjectList';
+import ProjectArchive from './screens/ProjectArchive';
 
 import Project from './screens/Project';
 import ProjectAdd from "./screens/ProjectAdd";
+
+import BudgetAdd from "./screens/BudgetAdd";
+import ScheduleAdd from "./screens/ScheduleAdd";
 
 
 let screen = Dimensions.get('window');
@@ -59,6 +63,39 @@ export const ProjectAddStack = createStackNavigator({
     },
 });
 
+export const BudgetAddStack = createStackNavigator({
+    Project: {
+        screen: BudgetAdd,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarVisible: false,
+            gesturesEnabled: true
+        }),
+    },
+});
+
+export const ScheduleAddStack = createStackNavigator({
+    Project: {
+        screen: ScheduleAdd,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarVisible: false,
+            gesturesEnabled: true
+        }),
+    },
+});
+
+export const ProjectArchiveStack = createStackNavigator({
+    Project: {
+        screen: ProjectArchive,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarVisible: false,
+            gesturesEnabled: true
+        }),
+    },
+});
+
 export const createRootNavigator = () => {
     return createStackNavigator(
         {
@@ -80,6 +117,27 @@ export const createRootNavigator = () => {
                 screen: ProjectAddStack,
                 navigationOptions: {
                     title: "Project Add",
+                    gesturesEnabled: true
+                }
+            },
+            BudgetAddStack: {
+                screen: BudgetAddStack,
+                navigationOptions: {
+                    title: "Budget Add",
+                    gesturesEnabled: true
+                }
+            },
+            ScheduleAddStack: {
+                screen: ScheduleAddStack,
+                navigationOptions: {
+                    title: "Schedule Add",
+                    gesturesEnabled: true
+                }
+            },
+            ProjectArchiveStack:{
+                screen: ProjectArchiveStack,
+                navigationOptions: {
+                    title: "Project Archive",
                     gesturesEnabled: true
                 }
             }

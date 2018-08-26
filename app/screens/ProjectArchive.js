@@ -75,7 +75,7 @@ export default class ProjectList extends Component {
                 //console.log(project);
                 //projects.push(project);
 
-                if (project.status != 'Done'){
+                if (project.status == 'Done'){
                     projects.push(project);
                 }
 
@@ -123,23 +123,19 @@ export default class ProjectList extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Button
-                    onPress={()=>this.openProjectAdd()}
-                    title="Add Project"
-                />
                 <ScrollView
                     refreshControl={
-                    <RefreshControl
-                    refreshing={this.state.isLoading}
-                    onRefresh={this.fetchProjectList}
-                />}
+                        <RefreshControl
+                            refreshing={this.state.isLoading}
+                            onRefresh={this.fetchProjectList}
+                        />}
                 >
                     <List containerStyle={{marginBottom: 20}}>
                         {
                             this.state.projects.map((data) => (
                                 <ListItem button onPress={() => this.openProject(data.id)}
-                                    key={data.id}
-                                    title={data.name}
+                                          key={data.id}
+                                          title={data.name}
                                 />
                             ))
                         }

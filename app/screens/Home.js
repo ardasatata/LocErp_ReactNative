@@ -17,27 +17,35 @@ export default class Home extends Component {
         this.state = { firebase: '' };
     }
 
+    openProjectList(){
+        this.props.navigation.navigate('ProjectArchiveStack',{
+        });
+    }
+
+    openArchiveProject(){
+        this.props.navigation.navigate('ProjectArchiveStack',{
+        });
+    }
+
     static navigationOptions = {
         title: 'Home',
     };
     render() {
         return (
             <View style={styles.container}>
+                <Text style={styles.title}>
+                    Main Menu
+                </Text>
                 <ScrollView>
-                    <Text style={styles.title}>
-                        Main Menu
-                    </Text>
                     <Button
-                        //onPress={}
+                        style={styles.button}
                         title="Project List"
-                        color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
                     />
                     <Button
-                        //onPress={}
+                        onPress={()=>this.openArchiveProject()}
+                        style={styles.button}
                         title="Archive Project"
                         color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
                     />
                 </ScrollView>
             </View>
@@ -53,8 +61,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     title: {
-        fontSize: 20,
+        fontSize: 28,
         textAlign: 'center',
         margin: 10,
+    },
+    button:{
+        padding: 8,
+        margin: 2,
+        fontSize: 18
     }
 });
