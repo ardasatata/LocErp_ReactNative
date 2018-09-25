@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    Text,
     View,
-    ScrollView,
-    ActivityIndicator,
-    RefreshControl,
-    Alert
+    Alert,
+    Picker
 } from 'react-native';
 import * as firebase from 'firebase';
 import { Button, FormLabel, FormInput } from 'react-native-elements';
@@ -21,10 +18,12 @@ export default class Project extends Component {
         // Don't call this.setState() here!
         this.state = {
             budget: {
-                amount : '',
+                amount : 0,
                 desc : '',
+                type : '',
             }, //data project
             projectId: '',
+            picker: 'Default value'
         };
     }
 
@@ -53,15 +52,23 @@ export default class Project extends Component {
 
         var query = firebase.database().ref("budgets/"+this.state.projectId);
 
-        var bAmount = this.state.budget.amount;
+        var bAmount = parseInt(this.state.budget.amount);
         var bDesc = this.state.budget.desc;
+        var bType = this.state.budget.type;
 
         var budget = {
             amount: bAmount,
-            desc: bDesc
+            desc: bDesc,
+            type: bType
         }
 
-        if (bDesc == '' ||bAmount == 0){
+        console.log(this.state.budget.amount);
+        console.log(this.state.budget.desc);
+        console.log(this.state.budget.type);
+        console.log(budget);
+
+
+        if (bDesc == '' ||bAmount == 0||bAmount == ''){
             this.inputAlert();
         }else{
             query.push(budget).then(()=>this.budgetAddedAlert());
@@ -111,14 +118,36 @@ export default class Project extends Component {
     }
 
     render() {
+        console.log(this.state.budget.amount);
+        console.log(this.state.budget.desc);
+        console.log(this.state.budget.type);
         return (
-            <View>
-                <View style={styles.form}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'column',
+                alignItems: 'stretch',
+                backgroundColor: '#F5FCFF'}}>
+
+                <View style={{flex: 2}}>
                     <FormLabel>Amount</FormLabel>
                     <FormInput onChangeText={(bAmount) => this.state.budget.amount = bAmount} keyboardType="numeric"/>
                     <FormLabel>Expense Desc</FormLabel>
                     <FormInput onChangeText={(bDesc) => this.state.budget.desc = bDesc}/>
+                </View>
 
+                <View style={{flex:2,alignItems: 'center',justifyContent: 'center'}}>
+                    <Picker
+                        selectedValue={this.state.picker}
+                        style={{ height: 50, width: 300 }}
+                        onValueChange={(itemValue,itemIndex) => {this.state.budget.type = itemValue, this.setState({picker:itemValue})}}>
+                        <Picker.Item label="Direct Rent" value="Direct Rent" />
+                        <Picker.Item label="Direct Labor" value="Direct Labor" />
+                        <Picker.Item label="FOH" value="FOH" />
+                        <Picker.Item label="Other" value="Other" />
+                    </Picker>
+                </View>
+
+                <View style={{flex: 3,alignItems:'center',justifyContent: 'center'}}>
                     <Button
                         onPress={() => this.addExpense()}
                         title="Add Expense"
@@ -129,7 +158,6 @@ export default class Project extends Component {
                             borderColor: "transparent",
                             borderWidth: 0,
                             borderRadius: 5,
-                            margin : 10
                         }}
                     />
                 </View>
@@ -146,7 +174,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     form:{
-        marginHorizontal: 20
+        alignItems: 'center',
+        margin: 10,
     },
     title: {
         fontSize: 20,

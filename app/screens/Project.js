@@ -20,6 +20,7 @@ export default class Project extends Component {
             project: [], //data project
             budgets:[], //data budget
             schedules:[], //data tanggal
+            attachments:[], //data attachments
             isLoading: true,
             projectId: '',
             expense: 0,
@@ -40,10 +41,11 @@ export default class Project extends Component {
         console.log(firebase);
         const {navigation} = this.props;
         this.state.projectId = navigation.getParam('projectId',null);
+        this.fetchAllData();
     }
 
     componentDidMount(){
-        this.fetchAllData();
+
     }
 
     fetchAllData(){
@@ -56,6 +58,7 @@ export default class Project extends Component {
             this.fetchProjectData();
             this.fetchBudgetsData();
             this.fetchSchedulesData();
+            this.fetchAttachmentsData();
         }
         finally {
             this.state.isLoading = false;
@@ -75,6 +78,32 @@ export default class Project extends Component {
             projectId : this.state.projectId
         });
         console.log('test hehe open add');
+    }
+
+    openAttachmentAdd(){
+        this.props.navigation.navigate('AttachmentAddStack',{
+            projectId : this.state.projectId
+        });
+        console.log('test hehe open add');
+    }
+
+    openAttachmentView(imageURL){
+        this.props.navigation.navigate('AttachmentViewStack',{
+            imageURL : imageURL
+        });
+        console.log('test hehe open attachment view');
+    }
+
+    openAttachmentExtra(id,imageURL){
+        Alert.alert(
+            'Atention',
+            'What are you gonna do with this ?',
+            [
+                {text: 'View', onPress: () => this.openAttachmentView(imageURL)},
+                {text: 'Delete', onPress: () => this.deleteAttachment(id)},
+            ],
+        )
+
     }
 
     fetchProjectData(){
@@ -114,6 +143,20 @@ export default class Project extends Component {
         });
     }
 
+    deleteSchedule(id){
+        var refDelete = firebase.database().ref('schedules/'+this.state.projectId+'/'+id);
+
+        Alert.alert(
+            'Atention',
+            'Delete this schedule ?',
+            [
+                {text: 'Cancel', onPress: () => console.log('cancel delete'), style: 'cancel'},
+                {text: 'OK', onPress: () => refDelete.remove().then(this.fetchAllData())},
+            ],
+        )
+
+    }
+
     deleteExpense(id){
         var refDelete = firebase.database().ref('budgets/'+this.state.projectId+'/'+id);
 
@@ -128,12 +171,12 @@ export default class Project extends Component {
 
     }
 
-    deleteSchedule(id){
-        var refDelete = firebase.database().ref('schedules/'+this.state.projectId+'/'+id);
+    deleteAttachment(id){
+        var refDelete = firebase.database().ref('attachments/'+this.state.projectId+'/'+id);
 
         Alert.alert(
             'Atention',
-            'Delete this schedule ?',
+            'Delete this attachments ?',
             [
                 {text: 'Cancel', onPress: () => console.log('cancel delete'), style: 'cancel'},
                 {text: 'OK', onPress: () => refDelete.remove().then(this.fetchAllData())},
@@ -163,7 +206,8 @@ export default class Project extends Component {
                 var budget = {
                     id: childSnapshot.key,
                     desc: childSnapshot.val().desc,
-                    amount: childSnapshot.val().amount
+                    amount: childSnapshot.val().amount,
+                    type: childSnapshot.val().type
                 }
 
                 expense += parseInt(budget.amount);
@@ -217,6 +261,42 @@ export default class Project extends Component {
                 //isLoading : false
             });
             console.log(this.state.schedules);
+        });
+
+    }
+
+    fetchAttachmentsData(){
+
+        var query = firebase.database().ref('attachments/'+this.state.projectId);
+
+        var _attachments = [];
+
+        let index = 1;
+
+        query.once("value").then(function(snapshot) {
+            snapshot.forEach(function (childSnapshot){
+
+                var attachment = {
+                    id: childSnapshot.key,
+                    url: childSnapshot.val(),
+                    index: index
+                }
+
+                index++;
+
+                console.log(attachment);
+                //projects.push(project);
+
+                _attachments.push(attachment);
+                //console.log(projects);
+            })
+            return _attachments;
+        }).then((_attachments)=>{
+            this.setState({
+                attachments : _attachments,
+                //isLoading : false
+            });
+            console.log(this.state.attachments);
         });
 
     }
@@ -296,14 +376,14 @@ export default class Project extends Component {
                         <Text>{this.state.project.status}</Text>
                     </View>
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={styles.rowProp} >
-                        <Text>End Date</Text>
-                    </View>
-                    <View style={{flex:2,}} >
-                        <Text>-</Text>
-                    </View>
-                </View>
+                {/*<View style={{flexDirection: 'row'}}>*/}
+                    {/*<View style={styles.rowProp} >*/}
+                        {/*<Text>End Date</Text>*/}
+                    {/*</View>*/}
+                    {/*<View style={{flex:2,}} >*/}
+                        {/*<Text>{this.state.project.dateAdded}</Text>*/}
+                    {/*</View>*/}
+                {/*</View>*/}
                 <View style={{flexDirection: 'row'}}>
                     <View style={styles.rowProp} >
                         <Text>Budget</Text>
@@ -350,7 +430,7 @@ export default class Project extends Component {
                                     this.state.budgets.map((data) => (
                                         <ListItem key={data.id}
                                                   button onPress={() => this.deleteExpense(data.id)}
-                                                  title={data.amount}
+                                                  title={data.amount +" "+data.type}
                                                   subtitle={data.desc}
                                         />
                                     ))
@@ -389,6 +469,34 @@ export default class Project extends Component {
                                               button onPress={() => this.deleteSchedule(data.id)}
                                               title={data.date +' '+data.time}
                                               subtitle={data.desc}
+                                    />
+                                ))
+                            }
+                        </List>
+                    </View>
+
+                    <Text style={styles.title}>
+                        Attachment
+                    </Text>
+                    <Button
+                        onPress={() => this.openAttachmentAdd()}
+                        title="Add Attachment"
+                        buttonStyle={{
+                            backgroundColor: "rgba(92, 99,216, 1)",
+                            width: 120,
+                            height: 45,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            borderRadius: 5
+                        }}
+                    />
+                    <View style={{flex:1}}>
+                        <List containerStyle={{marginBottom: 20}}>
+                            {
+                                this.state.attachments.map((data) => (
+                                    <ListItem key={data.id}
+                                              button onPress={() => this.openAttachmentExtra(data.id,data.url)}
+                                              title={data.index}
                                     />
                                 ))
                             }

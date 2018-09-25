@@ -34,20 +34,20 @@ export default class Home extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>
-                    Main Menu
+                    Welcome to Locomotive Project Tracker
                 </Text>
-                <ScrollView>
-                    <Button
-                        style={styles.button}
-                        title="Project List"
-                    />
-                    <Button
-                        onPress={()=>this.openArchiveProject()}
-                        style={styles.button}
-                        title="Archive Project"
-                        color="#841584"
-                    />
-                </ScrollView>
+                {/*<ScrollView>*/}
+                    {/*<Button*/}
+                        {/*style={styles.button}*/}
+                        {/*title="Project List"*/}
+                    {/*/>*/}
+                    {/*<Button*/}
+                        {/*onPress={()=>this.openArchiveProject()}*/}
+                        {/*style={styles.button}*/}
+                        {/*title="Archive Project"*/}
+                        {/*color="#841584"*/}
+                    {/*/>*/}
+                {/*</ScrollView>*/}
             </View>
         );
     }

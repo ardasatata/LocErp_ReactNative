@@ -19,6 +19,9 @@ import ProjectAdd from "./screens/ProjectAdd";
 import BudgetAdd from "./screens/BudgetAdd";
 import ScheduleAdd from "./screens/ScheduleAdd";
 
+import AttachmentAdd from "./screens/AttachmentAdd";
+import AttachmentView from "./screens/AttachmentView";
+
 
 let screen = Dimensions.get('window');
 
@@ -85,9 +88,20 @@ export const ScheduleAddStack = createStackNavigator({
     },
 });
 
-export const ProjectArchiveStack = createStackNavigator({
+export const AttachmentAddStack = createStackNavigator({
     Project: {
-        screen: ProjectArchive,
+        screen: AttachmentAdd,
+        navigationOptions: ({navigation}) => ({
+            header: null,
+            tabBarVisible: false,
+            gesturesEnabled: true
+        }),
+    },
+});
+
+export const AttachmentViewStack = createStackNavigator({
+    Project: {
+        screen: AttachmentView,
         navigationOptions: ({navigation}) => ({
             header: null,
             tabBarVisible: false,
@@ -134,10 +148,17 @@ export const createRootNavigator = () => {
                     gesturesEnabled: true
                 }
             },
-            ProjectArchiveStack:{
-                screen: ProjectArchiveStack,
+            AttachmentAddStack:{
+                screen: AttachmentAddStack,
                 navigationOptions: {
-                    title: "Project Archive",
+                    title: "Attachment Add",
+                    gesturesEnabled: true
+                }
+            },
+            AttachmentViewStack:{
+                screen: AttachmentViewStack,
+                navigationOptions: {
+                    title: "Attachment View",
                     gesturesEnabled: true
                 }
             }
